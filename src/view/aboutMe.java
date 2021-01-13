@@ -9,10 +9,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class aboutMe extends JPanel {
+public class AboutMe extends JPanel {
 	private static final Font FONT = new Font("Calibri", Font.CENTER_BASELINE, 25);
 
-	public aboutMe(JPanel gamefield) {
+	public AboutMe(JPanel gamefield) {
 		JLabel tekst = new JLabel("<html>Przemysław Rzempołuch.<html>");
 		tekst.setFont(FONT);
 		JPanel mePane = new JPanel();

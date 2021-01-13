@@ -22,23 +22,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import view.mainPanel;
+import view.MainPanel;
 
 public class SudokuController {
 	private SudokuView sudokuView;
-	private MyTextField[][] mainField;
+	
 	private SudokuModel sudokuModel;
 
 	public SudokuController(SudokuView sudokuView, SudokuModel sudokuModel) {
 		this.sudokuView = sudokuView;
 		this.sudokuModel = sudokuModel;
 
-		this.sudokuView.getMenuSaveGame().addActionListener(new saveArray());
-		this.sudokuView.getMenuLoadGame().addActionListener(new loadArray());
-		this.sudokuView.getNewGame().addActionListener(new clearField());
-		this.sudokuView.getFinisghGame().addActionListener(new finishGame());
-		this.sudokuView.getSolveGame().addActionListener(new solveGame());
-		this.sudokuView.getExit().addActionListener(new exitGame());
+		this.sudokuView.getGameFieltOne().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutOne()));
+		this.sudokuView.getGameFieltTwo().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutTwo()));
+		this.sudokuView.getGameFieltThree().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutThree()));
+		this.sudokuView.getGameFieltFour().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutFour()));
+		this.sudokuView.getMenuSaveGame().addActionListener(new SaveArray());
+		this.sudokuView.getMenuLoadGame().addActionListener(new LoadArray());
+		this.sudokuView.getNewGame().addActionListener(new ClearField());
+		this.sudokuView.getFinisghGame().addActionListener(new FinishGame());
+		this.sudokuView.getSolveGame().addActionListener(new SolveGame());
+		this.sudokuView.getExit().addActionListener(new ExitGame());
 		this.sudokuView.getMenuHelpGame().addMouseListener((ClickedListener) (e) -> {
 			sudokuModel.Info(sudokuView.getFrameHelp(), sudokuView.gethPanel());
 		});
@@ -64,11 +68,9 @@ public class SudokuController {
 		this.sudokuModel = sudokuModel;
 	}
 
-	public void markFields() {
-		Border border = BorderFactory.createLineBorder(Color.green, 2);
-	}
+	
 
-	class saveArray implements ActionListener {
+	class SaveArray implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -84,7 +86,7 @@ public class SudokuController {
 
 	}
 
-	class loadArray implements ActionListener {
+	class LoadArray implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -100,7 +102,7 @@ public class SudokuController {
 
 	}
 
-	class clearField implements ActionListener {
+	class ClearField implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -110,7 +112,7 @@ public class SudokuController {
 
 	}
 
-	class finishGame implements ActionListener {
+	class FinishGame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -120,7 +122,7 @@ public class SudokuController {
 
 	}
 
-	class solveGame implements ActionListener {
+	class SolveGame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -134,7 +136,7 @@ public class SudokuController {
 
 	}
 
-	class exitGame implements ActionListener {
+	class ExitGame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -142,6 +144,15 @@ public class SudokuController {
 
 		}
 
+	}
+	class NewGameLayout implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 
 }

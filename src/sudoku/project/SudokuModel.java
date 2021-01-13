@@ -2,43 +2,28 @@ package sudoku.project;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.JobAttributes;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.prefs.Preferences;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-
-import view.JTextFieldLimit;
-import view.aboutMe;
-import view.helpPanel;
+import view.AboutMe;
+import view.HelpPanel;
 
 public class SudokuModel {
-	private MyTextField[][] mainField;
-	private SudokuView sudokuView;
-	private SudokuModel sudokuModel;
+
 	Border borderEntere = BorderFactory.createLineBorder(Color.red, 2);
 	Border borderExited = BorderFactory.createLineBorder(Color.black, 1);
-	private JTextField previous;
 
 	public void exit(Container container) {
 		String[] options = { "Tal", "zapisz gre", "Nie" };
@@ -55,24 +40,30 @@ public class SudokuModel {
 	public void saveGame(MyTextField[][] jTextFields) throws IOException {
 		JFileChooser f = new JFileChooser();
 		f.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		
-		f.setCurrentDirectory(new File("/D:/"));//zaczynami na D
-		f.showSaveDialog(null);
-		
+
+		f.setCurrentDirectory(new File("/D:/"));// zaczynami na D
+
+		int value = f.showOpenDialog(null);
 		StringBuilder builder = new StringBuilder();
-		// System.out.print("wykonuje sie");
+
+		if (value == JFileChooser.CANCEL_OPTION) {
+			JOptionPane.showMessageDialog(null, "you closed with out selecting file");
+			return;
+		}
 		for (int i = 0; i < jTextFields.length; i++)// rzad
 		{
 			for (int j = 0; j < jTextFields.length; j++)// kolumna
 			{
 				builder.append(jTextFields[i][j].getText() + "");// dodwanai do stringa wyjscia
-				if (j < jTextFields.length - 1)// dodaj  przecinek do konca jesli to nie koniec
+				if (j < jTextFields.length - 1)// dodaj przecinek do konca jesli to nie koniec
 					builder.append(",");
 			}
 			builder.append("\n");// dodaj linie na koncu
 		}
-		BufferedWriter writer = new BufferedWriter(new FileWriter(f.getCurrentDirectory()+f.getSelectedFile().getName()+ ".txt"));
-		//System.out.print(f.getCurrentDirectory()+f.getSelectedFile().getName()+ ".txt");
+		BufferedWriter writer = new BufferedWriter(
+				new FileWriter(f.getCurrentDirectory() + f.getSelectedFile().getName() + ".txt"));
+		// System.out.print(f.getCurrentDirectory()+f.getSelectedFile().getName()+
+		// ".txt");
 		writer.write(builder.toString());
 		writer.close();
 	}
@@ -83,8 +74,12 @@ public class SudokuModel {
 		JFileChooser f = new JFileChooser();
 		f.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		f.setCurrentDirectory(new File("/D:/"));
-		f.showSaveDialog(null);
+		int value = f.showOpenDialog(null);
 
+		if (value == JFileChooser.CANCEL_OPTION) {
+			JOptionPane.showMessageDialog(null, "you closed with out selecting file");
+			return;
+		}
 //      System.out.println(f.getCurrentDirectory());
 //      System.out.println(f.getSelectedFile());
 		File savedGameFile = f.getSelectedFile();
@@ -93,7 +88,7 @@ public class SudokuModel {
 		String line = "";
 		int row = 0;
 		while ((line = reader.readLine()) != null) {
-			String[] cols = line.split(","); 
+			String[] cols = line.split(",");
 			int col = 0;
 			for (String c : cols) {
 				// board[row][col] = Integer.parseInt(c);
@@ -185,6 +180,7 @@ public class SudokuModel {
 //		System.out.print(Arrays.toString(sumRow));
 
 	}
+
 // działa ale moze bardzo długo 
 	public boolean solve(MyTextField[][] jTextFields, JFrame frame) {
 		for (int row = 0; row < 9; row++) {
@@ -273,18 +269,37 @@ public class SudokuModel {
 		}
 	}
 
-	public void Info(JFrame frame2, helpPanel hPanel) {
+	public void Info(JFrame frame2, HelpPanel hPanel) {
 		frame2.add(hPanel);
 
 		frame2.setVisible(true);
 
 	}
 
-	public void aboutAuthor(JFrame frame3, aboutMe aboutAuthor) {
+	public void aboutAuthor(JFrame frame3, AboutMe aboutAuthor) {
 
 		frame3.add(aboutAuthor);
 
 		frame3.setVisible(true);
 
 	}
-}
+
+	public void loadGameField(MyTextField[][] jTextFields, int[][] gameField) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				int temp = gameField[i][j];
+				if(temp == 0) {
+					jTextFields[i][j].setText("");
+				}else {
+				jTextFields[i][j].setText(String.valueOf(temp));
+				}
+					
+				
+			}
+		}
+	}
+
+}		
+
+	
+

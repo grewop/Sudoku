@@ -16,11 +16,11 @@ import javax.swing.text.PlainDocument;
 
 import sudoku.project.MyTextField;
 
-public class mainPanel extends JPanel {
+public class MainPanel extends JPanel {
 	
 	
 
-	public mainPanel(MyTextField[][] mainField, JPanel gridPanelMain, HighlightMouseListener hml) {
+	public MainPanel(MyTextField[][] mainField, JPanel gridPanelMain, HighlightMouseListener hml) {
 		
 		
 		// generowanie pól textowych 

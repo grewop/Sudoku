@@ -9,10 +9,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class helpPanel extends JPanel {
+public class HelpPanel extends JPanel {
 	private static final Font FONT = new Font("Calibri", Font.CENTER_BASELINE, 15);
 
-	public helpPanel(JPanel gamefield) {
+	public HelpPanel(JPanel gamefield) {
 		JLabel tekst = new JLabel("<html>The objective is to fill a 9x9 grid with digits so that each column, "
 				+ "each row, and each of the nine 3x3 subgrids that compose the grid "
 				+ "(also called \"boxes\", \"blocks\", or \"regions\") "

@@ -1,24 +1,13 @@
 package sudoku.project;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.Label;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,51 +15,94 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-
 import view.HighlightMouseListener;
-import view.aboutMe;
-import view.helpPanel;
-import view.mainPanel;
+import view.AboutMe;
+import view.HelpPanel;
+import view.MainPanel;
 
 public class SudokuView extends JFrame {
-	private aboutMe aboutAuthor;
-	private helpPanel hPanel;
-	private mainPanel mPanel;
-	JButton finish = new JButton("Sprawdz");
-	JButton solveGame = new JButton("Rozwiąż gre");
-	JButton newGame = new JButton("Nowa gra");
+	private AboutMe aboutAuthor;
+	private HelpPanel hPanel;
+	private MainPanel mPanel;
+	private JButton finish = new JButton("Sprawdz");
+	private JButton solveGame = new JButton("Rozwiąż gre");
+	private JButton newGame = new JButton("Nowa gra");
+	private JButton gameFieldOne = new JButton("1");
+	private JButton gameFieldTwo = new JButton("2");
+	private JButton gameFieldThree = new JButton("3");
+	private JButton gameFieldFour = new JButton("4");
+	private JMenu menu = new JMenu("Menu");
+	private JMenu info = new JMenu("Autor");
+	private JMenu help = new JMenu("Pomoc");
 
-	JMenu menu = new JMenu("Menu");
-	JMenu info = new JMenu("Autor");
-	JMenu help = new JMenu("Pomoc");
+	private JMenuItem exit = new JMenuItem("Wyjdz");
+	private JMenuItem saveGame = new JMenuItem("Zapisz gre");
+	private JMenuItem loadGame = new JMenuItem("Wczytaj gre");
+	private JMenuBar menuBar = new JMenuBar();
 
-	JMenuItem exit = new JMenuItem("Wyjdz");
-	JMenuItem saveGame = new JMenuItem("Zapisz gre");
-	JMenuItem loadGame = new JMenuItem("Wczytaj gre");
-	JMenuBar menuBar = new JMenuBar();
+	private JPanel gameField = new JPanel();
 
-	JPanel gameField = new JPanel();
-
-	JPanel flowPanel = new JPanel();
+	private JPanel flowPanel = new JPanel();
 
 	private static final Font FONT = new Font("Verdana", Font.CENTER_BASELINE, 10);
 
-	HighlightMouseListener hml = new HighlightMouseListener();
+	private HighlightMouseListener hml = new HighlightMouseListener();
 
 	// SudokuController test = new SudokuController(null, null);
-	SudokuModel model = new SudokuModel();
+	
 	private MyTextField mainField[][] = new MyTextField[9][9];
 	
+	private int[][] gameLayoutOne = {
+			{0 , 0 , 6 , 7 , 0 , 3 , 0 , 0 ,0 },
+			{0 , 0 , 0 , 0 , 0 , 0 , 6 , 7 ,0 },
+			{0 , 0 , 0 , 0 , 6 , 5 , 1 , 0 ,9 },
+			{0 , 7 , 2 , 5 , 0 , 4 , 8 , 9 ,0 },
+			{8 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,6 },
+			{0 , 9 , 3 , 2 , 0 , 6 , 7 , 4 ,0 },
+			{5 , 0 , 8 , 4 , 7 , 0 , 0 , 0 ,0 },
+			{0 , 2 , 9 , 0 , 0 , 0 , 0 , 0 ,0 },
+			{0 , 0 , 0 , 6 , 0 , 9 , 4 , 0 ,0 }
+			};
+		private	int[][] gameLayoutTwo = {
+					  { 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+					  { 0, 0, 3, 6, 0, 0, 0, 0, 0 },
+					  { 0, 7, 0, 0, 9, 0, 2, 0, 0 },
+					  { 0, 5, 0, 0, 0, 0, 0, 0, 0 },
+					  { 0, 0, 0, 0, 0, 0, 7, 0, 0 },
+					  { 0, 0, 0, 1, 0, 0, 0, 3, 0 },
+					  { 0, 0, 1, 0, 0, 0, 0, 6, 8 },
+					  { 0, 0, 8, 5, 0, 0, 0, 1, 0 },
+					  { 0, 9, 0, 0, 0, 0, 3, 0, 0 } 
+					};		
+		private	int[][] gameLayoutThree = {
+				  { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 2, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 3, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 4, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 5, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 6, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 7, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 8, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 9 } 
+				};	
+		private	int[][] gameLayoutFour = {
+				  { 0, 2, 0, 3, 0, 4, 0, 1, 0 },
+				  { 4, 1, 0, 0, 0, 5, 9, 0, 0  },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 2  },
+				  { 7, 5, 0, 9, 4, 0, 2, 3, 0  },
+				  { 0, 4, 3, 0, 0, 0, 6, 9, 0  },
+				  { 0, 9, 2, 0, 8, 3, 0, 4, 7  },
+				  { 2, 0, 0, 0, 0, 0, 0, 0, 0  },
+				  { 0, 0, 4, 2, 0, 0, 0, 5, 9  },
+				  { 0, 3, 0, 1, 0, 8, 0, 2, 0  } 
+				};	
 	// panaele na grupy texfield 3x3
-	JPanel gridPanelMain = new JPanel(new GridLayout(3, 3, -1, -1));
-
-	JFrame frame;
-	JFrame frame3;
-	JFrame frame2;
+	private JPanel gridPanelMain = new JPanel(new GridLayout(3, 3, -1, -1));
+	private JPanel buttonPanelGameField = new JPanel(new FlowLayout());
+	private	JFrame frame;
+	private	JFrame frame3;
+	private	JFrame frame2;
 
 	public SudokuView() {
 
@@ -78,14 +110,14 @@ public class SudokuView extends JFrame {
 		this.frame2 = new JFrame("Sudoku - pomoc");
 		this.frame3 = new JFrame("Sudoku - autor");
 
-		frame.setSize(900, 700);
+		frame.setSize(900, 750);
 		frame2.setSize(900, 300);
 		frame3.setSize(900, 300);
 
 		// dodawanie z oddzielnych klas panelu help i planszy
-		hPanel = new helpPanel(gameField);
-		mPanel = new mainPanel(mainField, gridPanelMain, hml);
-		aboutAuthor = new aboutMe(gameField);
+		hPanel = new HelpPanel(gameField);
+		mPanel = new MainPanel(mainField, gridPanelMain, hml);
+		aboutAuthor = new AboutMe(gameField);
 		// dodawanie menu
 		menuBar.add(menu);
 		menuBar.add(info);
@@ -94,7 +126,11 @@ public class SudokuView extends JFrame {
 		menu.add(exit);
 		menu.add(saveGame);
 		menu.add(loadGame);
-
+		buttonPanelGameField.add(new Label("Wybierz plansze: "));
+		buttonPanelGameField.add(gameFieldOne);
+		buttonPanelGameField.add(gameFieldTwo);
+		buttonPanelGameField.add(gameFieldThree);
+		buttonPanelGameField.add(gameFieldFour);
 		gameField.add(mPanel, BorderLayout.WEST);
 
 		flowPanel.setLayout(new BoxLayout(flowPanel, BoxLayout.Y_AXIS));
@@ -112,7 +148,7 @@ public class SudokuView extends JFrame {
 		flowPanel.add(finish);
 		flowPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 		flowPanel.add(solveGame);
-
+		frame.add(buttonPanelGameField, BorderLayout.NORTH);
 		frame.add(flowPanel, BorderLayout.SOUTH);
 		frame.add(gameField);
 		frame.setJMenuBar(menuBar);
@@ -146,7 +182,19 @@ public class SudokuView extends JFrame {
 	public void setfinishGame(JButton finish) {
 		this.finish = finish;
 	}
+	public JButton getGameFieltOne() {
+		return gameFieldOne;
+	}
 
+	public JButton getGameFieltTwo() {
+		return gameFieldTwo;
+	}
+	public JButton getGameFieltThree() {
+		return gameFieldThree;
+	}
+	public JButton getGameFieltFour() {
+		return gameFieldFour;
+	}
 	public JMenuItem getExit() {
 		return exit;
 	}
@@ -219,20 +267,36 @@ public class SudokuView extends JFrame {
 		return frame3;
 	}
 
-	public void sethPanel(helpPanel hPanel) {
+	public void sethPanel(HelpPanel hPanel) {
 		this.hPanel = hPanel;
 	}
 
-	public helpPanel gethPanel() {
+	public HelpPanel gethPanel() {
 		return hPanel;
 	}
 
-	public void setAuthorPanel(aboutMe aboutAuthor) {
+	public void setAuthorPanel(AboutMe aboutAuthor) {
 		this.aboutAuthor = aboutAuthor;
 	}
 
-	public aboutMe getAuthorPanel() {
+	public AboutMe getAuthorPanel() {
 		return aboutAuthor;
+	}
+	public int[][] getGameLayoutOne(){
+		return gameLayoutOne;
+		
+	}
+	public int[][] getGameLayoutTwo(){
+		return gameLayoutTwo;
+		
+	}
+	public int[][] getGameLayoutThree(){
+		return gameLayoutThree;
+		
+	}
+	public int[][] getGameLayoutFour(){
+		return gameLayoutFour;
+		
 	}
 
 }
