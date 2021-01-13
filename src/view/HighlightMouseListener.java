@@ -34,8 +34,7 @@ public class HighlightMouseListener extends MouseAdapter {
          previous = field;
          field.setBorder(borderEntere);
          colorFieldHover(mainField, x, y, borderEntere);
-         //do pomocy
-     //System.out.println("x = " + source.getXPos() + "y  "+ source.getYPos());
+  
         }
      
 	public void mouseExited(MouseEvent e) {

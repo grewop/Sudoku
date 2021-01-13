@@ -15,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import view.AboutMe;
 import view.HelpPanel;
@@ -126,7 +125,7 @@ public class SudokuModel {
 					return;
 				}
 				sumALL = sumALL + Integer.parseInt(jTextFields[row][col].getText());
-				// check row
+				// sprawdzaj rzedy
 				sumRow[row] += Integer.parseInt(jTextFields[row][col].getText());
 
 			}
@@ -137,7 +136,7 @@ public class SudokuModel {
 					JOptionPane.showMessageDialog(frame, "Dokończ grę");
 					return;
 				}
-				// check columss
+				// sprawdz kolumny
 				sumCol[col] += Integer.parseInt(jTextFields[row][col].getText());
 			}
 		}
@@ -176,8 +175,7 @@ public class SudokuModel {
 
 			}
 		}
-//		System.out.print(Arrays.toString(sumCol));
-//		System.out.print(Arrays.toString(sumRow));
+
 
 	}
 
@@ -191,37 +189,36 @@ public class SudokuModel {
 						String c = Integer.toString(k);
 						jTextFields[row][column].setText(c);
 						if (isValid(jTextFields, row, column) && solve(jTextFields, frame)) {
-							// System.out.println("solve true");
+							
 							return true;
 
 						}
 						jTextFields[row][column].setText("");
 					}
-					// JOptionPane.showMessageDialog(frame, "Nie można rozwiązać");
-					// System.out.println("solve false");
+					
 					return false;
 				}
 			}
 		}
-		// System.out.println("solve true");
+		
 		return true;
 	}
 
 	public boolean isValid(MyTextField[][] jTextFields, int row, int column) {
-		// System.out.println("isValid");
+		
 		return (rowConstraint(jTextFields, row) && columnConstraint(jTextFields, column)
 				&& subsectionConstraint(jTextFields, row, column));
 	}
 
 	public boolean rowConstraint(MyTextField[][] jTextFields, int row) {
 		boolean[] constraint = new boolean[9];
-		// System.out.println("rowConstraint");
+		
 		return IntStream.range(0, 9).allMatch(column -> checkConstraint(jTextFields, row, constraint, column));
 	}
 
 	public boolean columnConstraint(MyTextField[][] jTextFields, int column) {
 		boolean[] constraint = new boolean[9];
-		// System.out.println("columnConstraint");
+		
 		return IntStream.range(0, 9).allMatch(row -> checkConstraint(jTextFields, row, constraint, column));
 	}
 
@@ -236,27 +233,27 @@ public class SudokuModel {
 		for (int r = subsectionRowStart; r < subsectionRowEnd; r++) {
 			for (int c = subsectionColumnStart; c < subsectionColumnEnd; c++) {
 				if (!checkConstraint(jTextFields, r, constraint, c)) {
-					// System.out.println("subsectionConstraint FAlse");
+				
 					return false;
 				}
 			}
 		}
-		// System.out.println("subsectionConstraint True");
+		
 		return true;
 	}
 
 	boolean checkConstraint(MyTextField[][] jTextFields, int row, boolean[] constraint, int column) {
 		if (!jTextFields[row][column].getText().equals("")) {
 			if (!constraint[Integer.parseInt(jTextFields[row][column].getText()) - 1]) {
-				// System.out.println("chceckContraint");
+				
 				constraint[Integer.parseInt(jTextFields[row][column].getText()) - 1] = true;
-				// System.out.println("row " + row +" col "+ column);
+			
 			} else {
-				// System.out.println("chceckContraint FALSE");
+			
 				return false;
 			}
 		}
-		// System.out.println("chceckContraint TRUE");
+		
 		return true;
 	}
 

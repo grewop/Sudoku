@@ -27,7 +27,7 @@ public class SudokuView extends JFrame {
 	private MainPanel mPanel;
 	private JButton finish = new JButton("Sprawdz");
 	private JButton solveGame = new JButton("Rozwiąż gre");
-	private JButton newGame = new JButton("Nowa gra");
+	private JButton clearGame = new JButton("Wyczyść plansze");
 	private JButton gameFieldOne = new JButton("1");
 	private JButton gameFieldTwo = new JButton("2");
 	private JButton gameFieldThree = new JButton("3");
@@ -50,59 +50,31 @@ public class SudokuView extends JFrame {
 	private HighlightMouseListener hml = new HighlightMouseListener();
 
 	// SudokuController test = new SudokuController(null, null);
-	
+
 	private MyTextField mainField[][] = new MyTextField[9][9];
-	
-	private int[][] gameLayoutOne = {
-			{0 , 0 , 6 , 7 , 0 , 3 , 0 , 0 ,0 },
-			{0 , 0 , 0 , 0 , 0 , 0 , 6 , 7 ,0 },
-			{0 , 0 , 0 , 0 , 6 , 5 , 1 , 0 ,9 },
-			{0 , 7 , 2 , 5 , 0 , 4 , 8 , 9 ,0 },
-			{8 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,6 },
-			{0 , 9 , 3 , 2 , 0 , 6 , 7 , 4 ,0 },
-			{5 , 0 , 8 , 4 , 7 , 0 , 0 , 0 ,0 },
-			{0 , 2 , 9 , 0 , 0 , 0 , 0 , 0 ,0 },
-			{0 , 0 , 0 , 6 , 0 , 9 , 4 , 0 ,0 }
-			};
-		private	int[][] gameLayoutTwo = {
-					  { 0, 1, 0, 0, 0, 0, 0, 0, 0 },
-					  { 0, 0, 3, 6, 0, 0, 0, 0, 0 },
-					  { 0, 7, 0, 0, 9, 0, 2, 0, 0 },
-					  { 0, 5, 0, 0, 0, 0, 0, 0, 0 },
-					  { 0, 0, 0, 0, 0, 0, 7, 0, 0 },
-					  { 0, 0, 0, 1, 0, 0, 0, 3, 0 },
-					  { 0, 0, 1, 0, 0, 0, 0, 6, 8 },
-					  { 0, 0, 8, 5, 0, 0, 0, 1, 0 },
-					  { 0, 9, 0, 0, 0, 0, 3, 0, 0 } 
-					};		
-		private	int[][] gameLayoutThree = {
-				  { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-				  { 0, 2, 0, 0, 0, 0, 0, 0, 0 },
-				  { 0, 0, 3, 0, 0, 0, 0, 0, 0 },
-				  { 0, 0, 0, 4, 0, 0, 0, 0, 0 },
-				  { 0, 0, 0, 0, 5, 0, 0, 0, 0 },
-				  { 0, 0, 0, 0, 0, 6, 0, 0, 0 },
-				  { 0, 0, 0, 0, 0, 0, 7, 0, 0 },
-				  { 0, 0, 0, 0, 0, 0, 0, 8, 0 },
-				  { 0, 0, 0, 0, 0, 0, 0, 0, 9 } 
-				};	
-		private	int[][] gameLayoutFour = {
-				  { 0, 2, 0, 3, 0, 4, 0, 1, 0 },
-				  { 4, 1, 0, 0, 0, 5, 9, 0, 0  },
-				  { 0, 0, 0, 0, 0, 0, 0, 0, 2  },
-				  { 7, 5, 0, 9, 4, 0, 2, 3, 0  },
-				  { 0, 4, 3, 0, 0, 0, 6, 9, 0  },
-				  { 0, 9, 2, 0, 8, 3, 0, 4, 7  },
-				  { 2, 0, 0, 0, 0, 0, 0, 0, 0  },
-				  { 0, 0, 4, 2, 0, 0, 0, 5, 9  },
-				  { 0, 3, 0, 1, 0, 8, 0, 2, 0  } 
-				};	
+//plansze
+	private int[][] gameLayoutOne = { { 0, 0, 6, 7, 0, 3, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 6, 7, 0 },
+			{ 0, 0, 0, 0, 6, 5, 1, 0, 9 }, { 0, 7, 2, 5, 0, 4, 8, 9, 0 }, { 8, 0, 0, 0, 0, 0, 0, 0, 6 },
+			{ 0, 9, 3, 2, 0, 6, 7, 4, 0 }, { 5, 0, 8, 4, 7, 0, 0, 0, 0 }, { 0, 2, 9, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 6, 0, 9, 4, 0, 0 } };
+	private int[][] gameLayoutTwo = { { 0, 1, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 3, 6, 0, 0, 0, 0, 0 },
+			{ 0, 7, 0, 0, 9, 0, 2, 0, 0 }, { 0, 5, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 7, 0, 0 },
+			{ 0, 0, 0, 1, 0, 0, 0, 3, 0 }, { 0, 0, 1, 0, 0, 0, 0, 6, 8 }, { 0, 0, 8, 5, 0, 0, 0, 1, 0 },
+			{ 0, 9, 0, 0, 0, 0, 3, 0, 0 } };
+	private int[][] gameLayoutThree = { { 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 2, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 3, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 4, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 5, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 6, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 7, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 8, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 9 } };
+	private int[][] gameLayoutFour = { { 0, 2, 0, 3, 0, 4, 0, 1, 0 }, { 4, 1, 0, 0, 0, 5, 9, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 2 }, { 7, 5, 0, 9, 4, 0, 2, 3, 0 }, { 0, 4, 3, 0, 0, 0, 6, 9, 0 },
+			{ 0, 9, 2, 0, 8, 3, 0, 4, 7 }, { 2, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 4, 2, 0, 0, 0, 5, 9 },
+			{ 0, 3, 0, 1, 0, 8, 0, 2, 0 } };
 	// panaele na grupy texfield 3x3
 	private JPanel gridPanelMain = new JPanel(new GridLayout(3, 3, -1, -1));
 	private JPanel buttonPanelGameField = new JPanel(new FlowLayout());
-	private	JFrame frame;
-	private	JFrame frame3;
-	private	JFrame frame2;
+	private JFrame frame;
+	private JFrame frame3;
+	private JFrame frame2;
 
 	public SudokuView() {
 
@@ -135,15 +107,15 @@ public class SudokuView extends JFrame {
 
 		flowPanel.setLayout(new BoxLayout(flowPanel, BoxLayout.Y_AXIS));
 
-		newGame.setMaximumSize(new Dimension(200, 100));
+		clearGame.setMaximumSize(new Dimension(200, 100));
 		finish.setMaximumSize(new Dimension(200, 100));
 		solveGame.setMaximumSize(new Dimension(200, 100));
 
-		newGame.setAlignmentX(Component.CENTER_ALIGNMENT);
+		clearGame.setAlignmentX(Component.CENTER_ALIGNMENT);
 		finish.setAlignmentX(Component.CENTER_ALIGNMENT);
 		solveGame.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		flowPanel.add(newGame);
+		flowPanel.add(clearGame);
 		flowPanel.add(Box.createRigidArea(new Dimension(5, 10)));
 		flowPanel.add(finish);
 		flowPanel.add(Box.createRigidArea(new Dimension(5, 10)));
@@ -159,12 +131,12 @@ public class SudokuView extends JFrame {
 
 	}
 
-	public JButton getNewGame() {
-		return newGame;
+	public JButton getClearGame() {
+		return clearGame;
 	}
 
-	public void setNewGame(JButton newGame) {
-		this.newGame = newGame;
+	public void setClearGame(JButton newGame) {
+		this.clearGame = newGame;
 	}
 
 	public JButton getSolveGame() {
@@ -182,6 +154,7 @@ public class SudokuView extends JFrame {
 	public void setfinishGame(JButton finish) {
 		this.finish = finish;
 	}
+
 	public JButton getGameFieltOne() {
 		return gameFieldOne;
 	}
@@ -189,12 +162,15 @@ public class SudokuView extends JFrame {
 	public JButton getGameFieltTwo() {
 		return gameFieldTwo;
 	}
+
 	public JButton getGameFieltThree() {
 		return gameFieldThree;
 	}
+
 	public JButton getGameFieltFour() {
 		return gameFieldFour;
 	}
+
 	public JMenuItem getExit() {
 		return exit;
 	}
@@ -282,21 +258,25 @@ public class SudokuView extends JFrame {
 	public AboutMe getAuthorPanel() {
 		return aboutAuthor;
 	}
-	public int[][] getGameLayoutOne(){
+
+	public int[][] getGameLayoutOne() {
 		return gameLayoutOne;
-		
+
 	}
-	public int[][] getGameLayoutTwo(){
+
+	public int[][] getGameLayoutTwo() {
 		return gameLayoutTwo;
-		
+
 	}
-	public int[][] getGameLayoutThree(){
+
+	public int[][] getGameLayoutThree() {
 		return gameLayoutThree;
-		
+
 	}
-	public int[][] getGameLayoutFour(){
+
+	public int[][] getGameLayoutFour() {
 		return gameLayoutFour;
-		
+
 	}
 
 }

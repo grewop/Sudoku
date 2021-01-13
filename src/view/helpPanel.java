@@ -27,9 +27,8 @@ public class HelpPanel extends JPanel {
 		helpPane.add(new JLabel(" "), BorderLayout.EAST);
 		helpPane.add(new JLabel(" "), BorderLayout.WEST);
 		helpPane.add(tekst, BorderLayout.CENTER);
-		// helpPane.add(helpReturn, BorderLayout.SOUTH);
-		add(helpPane);
 
+		add(helpPane);
 
 	}
 

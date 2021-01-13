@@ -16,14 +16,11 @@ public class AboutMe extends JPanel {
 		JLabel tekst = new JLabel("<html>Przemysław Rzempołuch.<html>");
 		tekst.setFont(FONT);
 		JPanel mePane = new JPanel();
-
 		mePane.setPreferredSize(new Dimension(300, 200));
-
 		mePane.setLayout(new BorderLayout(30, 30));
 		mePane.add(new JLabel(" "), BorderLayout.EAST);
 		mePane.add(new JLabel(" "), BorderLayout.WEST);
 		mePane.add(tekst, BorderLayout.CENTER);
-		
 		add(mePane);
 	}
 }

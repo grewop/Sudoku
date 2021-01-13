@@ -1,28 +1,9 @@
 package sudoku.project;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
-
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-
-import view.MainPanel;
 
 public class SudokuController {
 	private SudokuView sudokuView;
@@ -39,7 +20,7 @@ public class SudokuController {
 		this.sudokuView.getGameFieltFour().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutFour()));
 		this.sudokuView.getMenuSaveGame().addActionListener(new SaveArray());
 		this.sudokuView.getMenuLoadGame().addActionListener(new LoadArray());
-		this.sudokuView.getNewGame().addActionListener(new ClearField());
+		this.sudokuView.getClearGame().addActionListener(new ClearField());
 		this.sudokuView.getFinisghGame().addActionListener(new FinishGame());
 		this.sudokuView.getSolveGame().addActionListener(new SolveGame());
 		this.sudokuView.getExit().addActionListener(new ExitGame());

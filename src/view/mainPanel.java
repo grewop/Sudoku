@@ -32,22 +32,20 @@ public class MainPanel extends JPanel {
 								MyTextField fieldText = new MyTextField(((a * 3) + i),((b * 3) + j));
 								fieldText.setHorizontalAlignment(JTextField.CENTER);
 								mainField[((a * 3) + i)][((b * 3) + j)] = fieldText;
-								//mainField[((a * 3) + i)][((b * 3) + j)].setText(" ");
+								
 								fieldText.addKeyListener(new KeyAdapter() {
 									public void keyTyped(KeyEvent e) {
 										char input = e.getKeyChar();
 										String text = fieldText.getText();
 										if ((input < '1' || input > '9') && input != '\b'){
 											e.consume();
-											//System.out.println("NIE CYFRA");
+											
 											
 										}
-//										if(text.length() == 1) {
-//												e.consume();
-//											}
+//										
 										//limit znakow bez potrzeby backspace
 										fieldText.setDocument(new PlainDocument());
-										//działa w tym przypadku 
+										
 									}
 								});
 								fieldText.addMouseListener(hml);	
