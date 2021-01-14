@@ -1,6 +1,5 @@
 package sudoku.project;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,17 +7,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.prefs.Preferences;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.border.Border;
-import view.AboutMe;
-import view.HelpPanel;
 
 public class SudokuModel {
 private int[][] solvedArray = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -122,7 +115,7 @@ private int[][] solvedArray = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 
 		for (int row = 0; row < 9; row++) {
 
 			for (int col = 0; col < 9; col++) {
-				// check all fields
+				// sprawdza wszystkie pola
 				if (iTextFields[row][col] == 0) {
 					JOptionPane.showMessageDialog(null, "Dokończ grę");
 					
