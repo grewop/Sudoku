@@ -3,21 +3,23 @@ package sudoku.project;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Arrays;
+
 import javax.swing.JOptionPane;
 
 public class SudokuController {
 	private SudokuView sudokuView;
-	
 	private SudokuModel sudokuModel;
-
+	private int valueField[][] = new int [9][9];
 	public SudokuController(SudokuView sudokuView, SudokuModel sudokuModel) {
 		this.sudokuView = sudokuView;
 		this.sudokuModel = sudokuModel;
-
-		this.sudokuView.getGameFieltOne().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutOne()));
-		this.sudokuView.getGameFieltTwo().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutTwo()));
-		this.sudokuView.getGameFieltThree().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutThree()));
-		this.sudokuView.getGameFieltFour().addActionListener(l -> sudokuModel.loadGameField(sudokuView.getMainField(), sudokuView.getGameLayoutFour()));
+		
+		this.sudokuView.getGameFieltOne().addActionListener(l -> loadGameFields((sudokuView.getMainField()), sudokuModel.loadGameField(arrayInt(sudokuView.getMainField()), sudokuView.getGameLayoutOne())));
+		this.sudokuView.getGameFieltTwo().addActionListener(l -> loadGameFields((sudokuView.getMainField()),sudokuModel.loadGameField(arrayInt(sudokuView.getMainField()), sudokuView.getGameLayoutTwo())));
+		this.sudokuView.getGameFieltThree().addActionListener(l -> loadGameFields((sudokuView.getMainField()),sudokuModel.loadGameField(arrayInt(sudokuView.getMainField()), sudokuView.getGameLayoutThree())));
+		
+		this.sudokuView.getGameFieltFour().addActionListener(l -> loadGameFields((sudokuView.getMainField()),sudokuModel.loadGameField(arrayInt(sudokuView.getMainField()), sudokuView.getGameLayoutFour())));
 		this.sudokuView.getMenuSaveGame().addActionListener(new SaveArray());
 		this.sudokuView.getMenuLoadGame().addActionListener(new LoadArray());
 		this.sudokuView.getClearGame().addActionListener(new ClearField());
@@ -25,13 +27,66 @@ public class SudokuController {
 		this.sudokuView.getSolveGame().addActionListener(new SolveGame());
 		this.sudokuView.getExit().addActionListener(new ExitGame());
 		this.sudokuView.getMenuHelpGame().addMouseListener((ClickedListener) (e) -> {
-			sudokuModel.Info(sudokuView.getFrameHelp(), sudokuView.gethPanel());
+			//sudokuModel.Info(sudokuView.getFrameHelp(), sudokuView.gethPanel());
+			sudokuView.getFrameHelp().add(sudokuView.gethPanel());
+
+			sudokuView.getFrameHelp().setVisible(true);
 		});
 		this.sudokuView.getMenuInfoGame().addMouseListener((ClickedListener) (e) -> {
+			sudokuView.getFrameME().add(sudokuView.getAuthorPanel());
 
-			sudokuModel.aboutAuthor(sudokuView.getFrameME(), sudokuView.getAuthorPanel());
+			sudokuView.getFrameME().setVisible(true);
+			//sudokuModel.aboutAuthor(sudokuView.getFrameME(), sudokuView.getAuthorPanel());
 		});
 	}
+	//int[][] itexfield z modelu 
+	public int[][] arrayInt(MyTextField[][] jTextFields) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				
+				if(jTextFields[i][j].getText().equals("")) {
+					valueField[i][j] =	0;
+				}else {
+					valueField[i][j] =	Integer.parseInt(jTextFields[i][j].getText());
+				}
+				//System.out.print(valueField[i][j]);	
+				
+			}
+		//	System.out.println("");
+		}
+	//	System.out.println(Arrays.deepToString(valueField));
+		return valueField;
+		
+	}
+	public void loadGameFields(MyTextField[][] jTextFields, int[][] gameField) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				int temp = gameField[i][j];
+				if(temp == 0) {
+					jTextFields[i][j].setText("");
+				}else {
+				jTextFields[i][j].setText(String.valueOf(temp));
+				}
+					
+				
+			}
+		}
+	}
+	public void loadSolveGameFields(MyTextField[][] jTextFields, int[][] gameField) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				int temp = gameField[i][j];
+				if(temp == 0) {
+					jTextFields[i][j].setText(String.valueOf(temp));
+				}else {
+				jTextFields[i][j].setText(String.valueOf(temp));
+				}
+					
+				
+			}
+		}
+	}
+	
 
 	public SudokuView getSudokuView() {
 		return sudokuView;
@@ -57,7 +112,7 @@ public class SudokuController {
 		public void actionPerformed(ActionEvent e) {
 			try {
 
-				sudokuModel.saveGame(sudokuView.getMainField());
+				sudokuModel.saveGame(arrayInt(sudokuView.getMainField()));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -74,7 +129,7 @@ public class SudokuController {
 			// TODO Auto-generated method stub
 
 			try {
-				sudokuModel.loadGame(sudokuView.getMainField());
+				loadGameFields(sudokuView.getMainField(),sudokuModel.loadGame(arrayInt(sudokuView.getMainField())));
 			} catch (NumberFormatException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -87,7 +142,7 @@ public class SudokuController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			sudokuModel.clearGrid(sudokuView.getMainField());
+			loadGameFields(sudokuView.getMainField(), sudokuModel.clearGrid(arrayInt(sudokuView.getMainField())));
 
 		}
 
@@ -97,7 +152,7 @@ public class SudokuController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			sudokuModel.finishGame(sudokuView.getFrame(), sudokuView.getMainField());
+			sudokuModel.finishGame(arrayInt(sudokuView.getMainField()));
 
 		}
 
@@ -107,12 +162,12 @@ public class SudokuController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (!sudokuModel.solve(sudokuView.getMainField(), sudokuView.getFrame())) {
+			if (!sudokuModel.solve(arrayInt(sudokuView.getMainField()), valueField)) {
 				JOptionPane.showMessageDialog(sudokuView.getFrame(), "Nie można rozwiązać");
 				return;
 			}
-			sudokuModel.printBoard(sudokuView.getMainField());
-
+			
+			loadSolveGameFields(sudokuView.getMainField(), sudokuModel.getReturnSolve());
 		}
 
 	}

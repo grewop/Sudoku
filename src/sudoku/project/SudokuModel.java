@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -20,10 +21,10 @@ import view.AboutMe;
 import view.HelpPanel;
 
 public class SudokuModel {
-
-	Border borderEntere = BorderFactory.createLineBorder(Color.red, 2);
-	Border borderExited = BorderFactory.createLineBorder(Color.black, 1);
-
+private int[][] solvedArray = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 	public void exit(Container container) {
 		String[] options = { "Tal", "zapisz gre", "Nie" };
 		int selection = JOptionPane.showOptionDialog(container, "Czy napewno chcesz zakończyć grę?", "koniec",
@@ -36,38 +37,37 @@ public class SudokuModel {
 	}
 
 	// zapisywanie samej tabeli
-	public void saveGame(MyTextField[][] jTextFields) throws IOException {
+	public void saveGame(int[][] iTextFields) throws IOException {
 		JFileChooser f = new JFileChooser();
 		f.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-		f.setCurrentDirectory(new File("/D:/"));// zaczynami na D
+		f.setCurrentDirectory(new File("/D:/"));// zaczynamy na D
 
 		int value = f.showOpenDialog(null);
 		StringBuilder builder = new StringBuilder();
 
 		if (value == JFileChooser.CANCEL_OPTION) {
-			JOptionPane.showMessageDialog(null, "you closed with out selecting file");
+			JOptionPane.showMessageDialog(null, "You closed without selecting a file");
 			return;
 		}
-		for (int i = 0; i < jTextFields.length; i++)// rzad
+		for (int i = 0; i < iTextFields.length; i++)// rzad
 		{
-			for (int j = 0; j < jTextFields.length; j++)// kolumna
+			for (int j = 0; j < iTextFields.length; j++)// kolumna
 			{
-				builder.append(jTextFields[i][j].getText() + "");// dodwanai do stringa wyjscia
-				if (j < jTextFields.length - 1)// dodaj przecinek do konca jesli to nie koniec
+				builder.append(iTextFields[i][j] + "");// dodwanai do stringa wyjscia
+				if (j < iTextFields.length - 1)// dodaj przecinek do konca jesli to nie koniec
 					builder.append(",");
 			}
 			builder.append("\n");// dodaj linie na koncu
 		}
 		BufferedWriter writer = new BufferedWriter(
 				new FileWriter(f.getCurrentDirectory() + f.getSelectedFile().getName() + ".txt"));
-		// System.out.print(f.getCurrentDirectory()+f.getSelectedFile().getName()+
-		// ".txt");
+		
 		writer.write(builder.toString());
 		writer.close();
 	}
 
-	public void loadGame(MyTextField[][] jTextFields) throws NumberFormatException, IOException {
+	public int[][] loadGame(int[][] iTextFields) throws NumberFormatException, IOException {
 		Preferences pref = Preferences.userRoot().node(getClass().getName());
 
 		JFileChooser f = new JFileChooser();
@@ -76,11 +76,10 @@ public class SudokuModel {
 		int value = f.showOpenDialog(null);
 
 		if (value == JFileChooser.CANCEL_OPTION) {
-			JOptionPane.showMessageDialog(null, "you closed with out selecting file");
-			return;
+			JOptionPane.showMessageDialog(null, "You closed without selecting a file");
+			return iTextFields;
 		}
-//      System.out.println(f.getCurrentDirectory());
-//      System.out.println(f.getSelectedFile());
+
 		File savedGameFile = f.getSelectedFile();
 		int[][] board = new int[9][9];
 		BufferedReader reader = new BufferedReader(new FileReader(savedGameFile));
@@ -90,27 +89,31 @@ public class SudokuModel {
 			String[] cols = line.split(",");
 			int col = 0;
 			for (String c : cols) {
-				// board[row][col] = Integer.parseInt(c);
-				jTextFields[row][col].setText(c);
+				if(c.equals("")) {
+					iTextFields[row][col] = 0;
+				}else {
+				iTextFields[row][col] = Integer.parseInt(c);
+				}
 				col++;
 
 			}
 			row++;
 		}
 		reader.close();
+		return iTextFields;
 	}
 
-	public void clearGrid(MyTextField[][] jTextFields) {
+	public int[][] clearGrid(int[][] iTextFields) {
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
-				jTextFields[x][y].setText("");
+				iTextFields[x][y] = 0;
 
 			}
 		}
-
+		return iTextFields;
 	}
 
-	public void finishGame(JFrame frame, MyTextField[][] jTextFields) {
+	public int[][] finishGame( int[][] iTextFields) {
 		int sumALL = 0;
 		int sumRow[] = new int[9];
 		int sumCol[] = new int[9];
@@ -120,24 +123,25 @@ public class SudokuModel {
 
 			for (int col = 0; col < 9; col++) {
 				// check all fields
-				if (jTextFields[row][col].getText().equals("")) {
-					JOptionPane.showMessageDialog(frame, "Dokończ grę");
-					return;
+				if (iTextFields[row][col] == 0) {
+					JOptionPane.showMessageDialog(null, "Dokończ grę");
+					
+					return iTextFields;
 				}
-				sumALL = sumALL + Integer.parseInt(jTextFields[row][col].getText());
+				sumALL = sumALL + iTextFields[row][col];
 				// sprawdzaj rzedy
-				sumRow[row] += Integer.parseInt(jTextFields[row][col].getText());
+				sumRow[row] += iTextFields[row][col];
 
 			}
 		}
 		for (int col = 0; col < 9; col++) {
 			for (int row = 0; row < 9; row++) {
-				if (jTextFields[row][col].getText().equals("")) {
-					JOptionPane.showMessageDialog(frame, "Dokończ grę");
-					return;
+				if (iTextFields[row][col] == 0) {
+					JOptionPane.showMessageDialog(null, "Dokończ grę");
+					return iTextFields;
 				}
 				// sprawdz kolumny
-				sumCol[col] += Integer.parseInt(jTextFields[row][col].getText());
+				sumCol[col] += iTextFields[row][col];
 			}
 		}
 		for (int a = 0; a < 3; ++a) {
@@ -146,12 +150,12 @@ public class SudokuModel {
 				for (int i = 0; i < 3; ++i) {
 					for (int j = 0; j < 3; ++j) {
 
-						sum3x3[a][b] += Integer.parseInt(jTextFields[((a * 3) + i)][((b * 3) + j)].getText());
+						sum3x3[a][b] += iTextFields[((a * 3) + i)][((b * 3) + j)];
 
 					}
 
 				}
-				System.out.println(sum3x3[a][b] + " a = " + a + " b = " + b);
+				
 			}
 		}
 		// zamiana tablicy 2d na 1d dla łatwiejszego sprawdzania
@@ -163,37 +167,43 @@ public class SudokuModel {
 			int z = sumCol[i];
 			int y = sumRow[i];
 
-			System.out.println("i = " + i + " z = " + z + " y = " + y);
+			
 
 			if (z != 45 || y != 45 || box != 45) {
 
-				JOptionPane.showMessageDialog(frame, "Gdzieś jest błąd");
+				JOptionPane.showMessageDialog(null, "Gdzieś jest błąd");
 				break;
 			}
 			if (i == 8 && sumALL == 405) { // i == 8 oznacza ze przeszlo bez bledow przez wszystko
-				JOptionPane.showMessageDialog(frame, "Gratulacje rozwiązałeś sudoku");
+				JOptionPane.showMessageDialog(null, "Gratulacje rozwiązałeś sudoku");
 
 			}
 		}
-
+		return iTextFields;
 
 	}
+	
 
 // działa ale moze bardzo długo 
-	public boolean solve(MyTextField[][] jTextFields, JFrame frame) {
+	
+	public boolean solve(int[][] iTextFields, int[][] solvedArray )   {
+		
+		this.solvedArray =  solvedArray;
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
-				if (jTextFields[row][column].getText().equals("")) {
+				if (iTextFields[row][column] == 0) {
 					for (int k = 1; k <= 9; k++) {
 
-						String c = Integer.toString(k);
-						jTextFields[row][column].setText(c);
-						if (isValid(jTextFields, row, column) && solve(jTextFields, frame)) {
-							
+						
+						iTextFields[row][column] = k;
+						
+						if (isValid(iTextFields, row, column) && solve(iTextFields, solvedArray)) {
+							solvedArray[row][column] = k;
 							return true;
 
 						}
-						jTextFields[row][column].setText("");
+						iTextFields[row][column] = 0;
+						solvedArray[row][column] = 0;
 					}
 					
 					return false;
@@ -203,26 +213,26 @@ public class SudokuModel {
 		
 		return true;
 	}
-
-	public boolean isValid(MyTextField[][] jTextFields, int row, int column) {
+	
+	public boolean isValid(int[][] iTextFields, int row, int column) {
 		
-		return (rowConstraint(jTextFields, row) && columnConstraint(jTextFields, column)
-				&& subsectionConstraint(jTextFields, row, column));
+		return (rowConstraint(iTextFields, row) && columnConstraint(iTextFields, column)
+				&& subsectionConstraint(iTextFields, row, column));
 	}
 
-	public boolean rowConstraint(MyTextField[][] jTextFields, int row) {
+	public boolean rowConstraint(int[][] iTextFields, int row) {
 		boolean[] constraint = new boolean[9];
 		
-		return IntStream.range(0, 9).allMatch(column -> checkConstraint(jTextFields, row, constraint, column));
+		return IntStream.range(0, 9).allMatch(column -> checkConstraint(iTextFields, row, constraint, column));
 	}
 
-	public boolean columnConstraint(MyTextField[][] jTextFields, int column) {
+	public boolean columnConstraint(int[][] iTextFields, int column) {
 		boolean[] constraint = new boolean[9];
 		
-		return IntStream.range(0, 9).allMatch(row -> checkConstraint(jTextFields, row, constraint, column));
+		return IntStream.range(0, 9).allMatch(row -> checkConstraint(iTextFields, row, constraint, column));
 	}
 
-	public boolean subsectionConstraint(MyTextField[][] jTextFields, int row, int column) {
+	public boolean subsectionConstraint(int[][] iTextFields, int row, int column) {
 		boolean[] constraint = new boolean[9];
 		int subsectionRowStart = (row / 3) * 3;
 		int subsectionRowEnd = subsectionRowStart + 3;
@@ -232,7 +242,7 @@ public class SudokuModel {
 
 		for (int r = subsectionRowStart; r < subsectionRowEnd; r++) {
 			for (int c = subsectionColumnStart; c < subsectionColumnEnd; c++) {
-				if (!checkConstraint(jTextFields, r, constraint, c)) {
+				if (!checkConstraint(iTextFields, r, constraint, c)) {
 				
 					return false;
 				}
@@ -242,11 +252,11 @@ public class SudokuModel {
 		return true;
 	}
 
-	boolean checkConstraint(MyTextField[][] jTextFields, int row, boolean[] constraint, int column) {
-		if (!jTextFields[row][column].getText().equals("")) {
-			if (!constraint[Integer.parseInt(jTextFields[row][column].getText()) - 1]) {
+	boolean checkConstraint(int[][] iTextFields, int row, boolean[] constraint, int column) {
+		if (iTextFields[row][column] != 0) {
+			if (!constraint[iTextFields[row][column] - 1]) {
 				
-				constraint[Integer.parseInt(jTextFields[row][column].getText()) - 1] = true;
+				constraint[iTextFields[row][column] - 1] = true;
 			
 			} else {
 			
@@ -257,43 +267,34 @@ public class SudokuModel {
 		return true;
 	}
 
-	public void printBoard(MyTextField[][] jTextFields) {
+	public void printBoard(int[][] iTextFields) {
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
-				System.out.print(jTextFields[row][column].getText() + " ");
+				System.out.print(iTextFields[row][column] + " ");
+				
+				
 			}
 			System.out.println();
 		}
 	}
-
-	public void Info(JFrame frame2, HelpPanel hPanel) {
-		frame2.add(hPanel);
-
-		frame2.setVisible(true);
-
+public int[][] getReturnSolve(){
+		return solvedArray;
 	}
 
-	public void aboutAuthor(JFrame frame3, AboutMe aboutAuthor) {
-
-		frame3.add(aboutAuthor);
-
-		frame3.setVisible(true);
-
-	}
-
-	public void loadGameField(MyTextField[][] jTextFields, int[][] gameField) {
+	public int[][] loadGameField(int[][] iTextFields, int[][] gameField) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				int temp = gameField[i][j];
 				if(temp == 0) {
-					jTextFields[i][j].setText("");
+					iTextFields[i][j] = 0;
 				}else {
-				jTextFields[i][j].setText(String.valueOf(temp));
+				iTextFields[i][j] = gameField[i][j];
 				}
 					
 				
 			}
 		}
+		return iTextFields;
 	}
 
 }		

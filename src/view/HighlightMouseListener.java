@@ -9,17 +9,15 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import sudoku.project.MyTextField;
-import sudoku.project.SudokuModel;
-import sudoku.project.SudokuView;
+
 
 public class HighlightMouseListener extends MouseAdapter {
-	private SudokuModel sudokuModel;
-	private SudokuView  sudokuView;
+	
 	
 	private MyTextField[][] mainField;
 	private JTextField previous;
-	Border borderEntere = BorderFactory.createLineBorder(Color.red, 2);
-	Border borderExited = BorderFactory.createLineBorder(Color.black, 1);
+	private Border borderEntere = BorderFactory.createLineBorder(Color.red, 2);
+	private Border borderExited = BorderFactory.createLineBorder(Color.black, 1);
 	
 	
 	public void mouseEntered(MouseEvent e) {

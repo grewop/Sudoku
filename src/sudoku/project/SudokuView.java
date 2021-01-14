@@ -50,7 +50,7 @@ public class SudokuView extends JFrame {
 	private HighlightMouseListener hml = new HighlightMouseListener();
 
 	// SudokuController test = new SudokuController(null, null);
-
+	//private int valueField[][] = new int [9][9];
 	private MyTextField mainField[][] = new MyTextField[9][9];
 //plansze
 	private int[][] gameLayoutOne = { { 0, 0, 6, 7, 0, 3, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 6, 7, 0 },
